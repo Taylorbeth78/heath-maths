@@ -130,6 +130,64 @@ const QUESTIONS = {
   'Data interpretation': [
     {q:'A frequency table: 0-10 (freq 5), 10-20 (freq 12), 20-30 (freq 8). Find the modal class.',a:'10-20',d:1},{q:'From the same table, estimate the mean.',a:'(5×5 + 15×12 + 25×8) ÷ 25 = 15',d:4},{q:'A two-way table: 30 boys, 24 girls like maths. 20 boys, 26 girls prefer English. How many students total?',a:'100',d:2},{q:'What does a frequency density of 3 mean for a class width of 5?',a:'Frequency = 15',d:5},
   ],
+
+  'Surds': [
+    {q:'Simplify sqrt(50)',a:'5sqrt(2)',d:2},{q:'Simplify sqrt(12) + sqrt(27)',a:'5sqrt(3)',d:3},{q:'Expand (1 + sqrt(3))^2',a:'4 + 2sqrt(3)',d:4},{q:'Rationalise 1/sqrt(5)',a:'sqrt(5)/5',d:3},{q:'Simplify sqrt(8) x sqrt(2)',a:'4',d:2},{q:'Write sqrt(75) in simplest surd form.',a:'5sqrt(3)',d:2},
+  ],
+  'HCF & LCM': [
+    {q:'Find the HCF of 24 and 36.',a:'12',d:1},{q:'Find the LCM of 4 and 6.',a:'12',d:1},{q:'Find the HCF of 60 and 84.',a:'12',d:2},{q:'Find the LCM of 8 and 12.',a:'24',d:2},{q:'Write 60 as a product of prime factors.',a:'2^2 x 3 x 5',d:2},{q:'Find the LCM of 15, 20 and 25.',a:'300',d:4},
+  ],
+  'Bounds & error intervals': [
+    {q:'A length is 8cm to the nearest cm. Write the error interval.',a:'7.5 <= x < 8.5',d:2},{q:'A mass is 3.6kg to 1dp. Write the error interval.',a:'3.55 <= x < 3.65',d:3},{q:'Upper bound of 12.4 (1dp)?',a:'12.45',d:2},{q:'Lower bound of 7.0 (1dp)?',a:'6.95',d:2},{q:'A speed is 60mph to nearest 10. Write the error interval.',a:'55 <= v < 65',d:3},
+  ],
+  'Inequalities': [
+    {q:'Solve 3x + 2 > 11',a:'x > 3',d:2},{q:'Solve -2x <= 8',a:'x >= -4',d:2},{q:'List integer values satisfying -2 < x <= 3',a:'-1, 0, 1, 2, 3',d:2},{q:'Solve 4 < 2x + 2 <= 10',a:'1 < x <= 4',d:3},{q:'Solve x^2 < 16',a:'-4 < x < 4',d:4},
+  ],
+  'Quadratic graphs': [
+    {q:'What shape does y = x^2 produce?',a:'A parabola (U-shape)',d:1},{q:'Write the turning point of y = (x-3)^2 + 2',a:'(3, 2)',d:3},{q:'Find the x-intercepts of y = x^2 - 4x + 3',a:'x=1 and x=3',d:3},{q:'What is the line of symmetry of y = x^2 - 6x + 5?',a:'x = 3',d:3},{q:'Find the y-intercept of y = 2x^2 - 3x + 4',a:'(0, 4)',d:2},
+  ],
+  'Algebraic fractions': [
+    {q:'Simplify (x^2 - 4)/(x + 2)',a:'x - 2',d:3},{q:'Simplify (2x)/(4x^2)',a:'1/(2x)',d:2},{q:'Add 1/x + 1/(x+1)',a:'(2x+1)/(x(x+1))',d:4},{q:'Simplify (x^2 + 5x + 6)/(x + 2)',a:'x + 3',d:4},{q:'Solve 3/x = 2/(x-1)',a:'x = 3',d:5},
+  ],
+  'Functions': [
+    {q:'If f(x) = 2x + 3, find f(4)',a:'11',d:1},{q:'If f(x) = x^2 - 1, find f(-3)',a:'8',d:2},{q:'If f(x) = 3x + 1, find the inverse f^-1(x)',a:'(x-1)/3',d:3},{q:'If f(x) = 2x and g(x) = x + 5, find fg(x)',a:'2x + 10',d:4},{q:'If f(x) = 1/(x-2), what value of x is not allowed?',a:'x = 2',d:3},
+  ],
+  'Iteration': [
+    {q:'What does it mean for iteration to converge?',a:'The values get closer and closer to the root',d:2},{q:'Use x_(n+1) = (5 - x_n)/x_n^2 with x_1=1. Find x_2.',a:'x_2 = 4',d:4},{q:'Show that x^3 + x = 5 has a root between 1 and 2.',a:'f(1) = -3 < 0 and f(2) = 5 > 0, so root exists between 1 and 2',d:3},
+  ],
+  'Angles & parallel lines': [
+    {q:'What are alternate angles?',a:'Equal angles on opposite sides of a transversal (Z-angles)',d:2},{q:'What are co-interior angles?',a:'Angles on the same side between parallel lines - add to 180 degrees',d:2},{q:'Corresponding angles are 65 degrees. Find the other corresponding angle.',a:'65 degrees',d:1},{q:'Find the co-interior angle to 110 degrees.',a:'70 degrees',d:2},{q:'Vertically opposite angles are 3x and 2x + 20. Find x.',a:'x = 20',d:3},
+  ],
+  'Sine & cosine rule': [
+    {q:'State the cosine rule.',a:'a^2 = b^2 + c^2 - 2bc cosA',d:2},{q:'State the sine rule.',a:'a/sinA = b/sinB = c/sinC',d:2},{q:'In triangle ABC, a=8, b=6, c=5. Find angle A.',a:'A = 92.9 degrees',d:5},{q:'In triangle, a=6, A=40 degrees, B=70 degrees. Find b.',a:'b = 8.77',d:4},
+  ],
+  'Vectors': [
+    {q:'If a = (3,4), find |a|.',a:'5',d:2},{q:'Add vectors (2,3) and (-1,5).',a:'(1,8)',d:1},{q:'Multiply vector (3,-2) by scalar 4.',a:'(12,-8)',d:1},{q:'OABC is a parallelogram. OA = a, OC = c. Find OB.',a:'a + c',d:3},{q:'In triangle OAB, M is midpoint of AB. Express OM in terms of a and b.',a:'OM = 0.5(a+b)',d:4},
+  ],
+  'Constructions & loci': [
+    {q:'What is a locus?',a:'The set of all points that satisfy a given condition',d:1},{q:'Describe the locus of points 3cm from a fixed point.',a:'A circle of radius 3cm',d:1},{q:'Describe the locus of points equidistant from two fixed points.',a:'The perpendicular bisector of the line joining the two points',d:3},{q:'How do you bisect a line segment with a compass?',a:'Draw arcs from each end and join where they cross above and below',d:2},
+  ],
+  'Frequency tables & grouped data': [
+    {q:'Class 0-10 (f=5), 10-20 (f=12), 20-30 (f=8). Find the modal class.',a:'10-20',d:1},{q:'Estimate the mean from: 0-10 (f=5), 10-20 (f=12), 20-30 (f=8)',a:'(5x5 + 15x12 + 25x8) / 25 = 15',d:4},{q:'What midpoint do you use for class 20 < x <= 30?',a:'25',d:2},{q:'40 values in a grouped table. Where is the median?',a:'Between the 20th and 21st values',d:3},
+  ],
+  'Tree diagrams': [
+    {q:'P(pass) = 0.7 for each of 2 independent tests. Find P(pass both).',a:'0.49',d:2},{q:'What does without replacement mean?',a:'The first item is not put back before the second is drawn',d:2},{q:'P(rain) = 0.3, P(late|rain) = 0.6, P(late|no rain) = 0.1. Find P(late).',a:'0.3x0.6 + 0.7x0.1 = 0.25',d:5},
+  ],
+  'Histograms': [
+    {q:'What does the y-axis represent on a histogram?',a:'Frequency density',d:1},{q:'Frequency density = frequency divided by what?',a:'Class width',d:2},{q:'A bar has class width 5 and frequency density 4. What is the frequency?',a:'20',d:2},{q:'Why are histograms used for grouped continuous data?',a:'The area of each bar represents the frequency',d:3},{q:'Class 10-15 has frequency 30. What is the frequency density?',a:'6',d:3},
+  ],
+  'Frequency trees': [
+    {q:'What is a frequency tree used for?',a:'To organise and count outcomes across two or more categories',d:1},{q:'In a frequency tree, what must branches at each split add up to?',a:'The total from the previous branch',d:2},{q:'60 students: 35 study French. Of those, 20 also study Spanish. 10 of the remaining 25 study Spanish. How many study neither?',a:'15',d:3},
+  ],
+  'Speed, distance & time': [
+    {q:'A car travels 150km in 3 hours. Find the average speed.',a:'50 km/h',d:1},{q:'Speed = 80 km/h, time = 2.5 hours. Find distance.',a:'200km',d:1},{q:'Distance = 240km, speed = 60 km/h. Find time.',a:'4 hours',d:1},{q:'Convert 90 km/h to m/s.',a:'25 m/s',d:3},{q:'A train travels 180 miles at 60 mph. How long is the journey?',a:'3 hours',d:2},
+  ],
+  'Density, mass & volume': [
+    {q:'Find density if mass = 600g and volume = 200cm^3.',a:'3 g/cm^3',d:1},{q:'Find the mass if density = 8 g/cm^3 and volume = 50cm^3.',a:'400g',d:2},{q:'Find the volume if density = 2.5 g/cm^3 and mass = 150g.',a:'60cm^3',d:2},{q:'Lead has density 11.3 g/cm^3. Find mass of 40cm^3.',a:'452g',d:3},
+  ],
+  'Pressure, force & area': [
+    {q:'Find pressure if force = 500N and area = 25m^2.',a:'20 Pa',d:1},{q:'Find the force if pressure = 40 Pa and area = 5m^2.',a:'200N',d:2},{q:'Find the area if force = 300N and pressure = 60 Pa.',a:'5m^2',d:2},{q:'A box weighing 120N has base 0.4m x 0.3m. Find pressure on floor.',a:'1000 Pa',d:3},
+  ],
 }
 
 const VOCABULARY = {
@@ -191,7 +249,7 @@ const TOPIC_CATEGORY = {
   'Scatter graphs': 'Statistics', 'Probability': 'Statistics',
   'Cumulative frequency': 'Statistics', 'Box plots': 'Statistics',
   'Venn diagrams': 'Statistics',
-  'Money & budgeting': 'Functional', 'Time calculations': 'Functional',
+  'Surds':'Number','HCF & LCM':'Number','Bounds & error intervals':'Number','Inequalities':'Algebra','Quadratic graphs':'Algebra','Algebraic fractions':'Algebra','Functions':'Algebra','Iteration':'Algebra','Angles & parallel lines':'Geometry','Sine & cosine rule':'Geometry','Vectors':'Geometry','Constructions & loci':'Geometry','Frequency tables & grouped data':'Statistics','Tree diagrams':'Statistics','Histograms':'Statistics','Frequency trees':'Statistics','Speed, distance & time':'Functional','Density, mass & volume':'Functional','Pressure, force & area':'Functional','Money & budgeting': 'Functional', 'Time calculations': 'Functional',
   'Measurement conversions': 'Functional', 'Reading charts': 'Functional',
   'Percentages in context': 'Functional', 'Area & perimeter in context': 'Functional',
   'Averages in context': 'Functional', 'Probability in context': 'Functional',
@@ -204,6 +262,10 @@ const YEAR_TOPICS = {
   'Year 9': ['Standard form','Powers & roots','Factorising','nth term sequences','Straight line graphs','Pythagoras theorem','Scatter graphs','Simultaneous equations'],
   'KS4 Foundation': ['Solving quadratics','Trigonometry','Compound interest','Cumulative frequency','Box plots','Circle theorems','Transformations','Venn diagrams'],
   'KS4 Higher': ['Circle theorems','Rearranging formulae','Solving quadratics','Bearings','Simultaneous equations','Trigonometry','Compound interest','Venn diagrams'],
+  'GCSE Foundation': ['Solving quadratics','Trigonometry','Compound interest','Cumulative frequency','Box plots','Transformations','Venn diagrams','Inequalities','Quadratic graphs','Tree diagrams','Frequency tables & grouped data','Bearings','Scale & maps'],
+  'GCSE Higher': ['Circle theorems','Rearranging formulae','Solving quadratics','Sine & cosine rule','Simultaneous equations','Surds','Vectors','Algebraic fractions','Functions','Iteration','Histograms','Bounds & error intervals'],
+  'IGCSE Foundation': ['Solving quadratics','Trigonometry','Compound interest','Cumulative frequency','Box plots','Transformations','Venn diagrams','Inequalities','Bearings','Scale & maps','Ratio & proportion','Measurement conversions'],
+  'IGCSE Higher': ['Circle theorems','Rearranging formulae','Sine & cosine rule','Surds','Vectors','Algebraic fractions','Functions','Histograms','Bounds & error intervals','Simultaneous equations','Factorising'],
   'Functional Skills L1': ['Money & budgeting','Time calculations','Measurement conversions','Reading charts','Percentages in context','Area & perimeter in context'],
   'Functional Skills L2': ['Averages in context','Probability in context','Scale & maps','Data interpretation','Percentages in context','Measurement conversions'],
 }
