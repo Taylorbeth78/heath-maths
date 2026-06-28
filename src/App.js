@@ -11,6 +11,7 @@ import Calculator from './pages/Calculator'
 import GraphPlotter from './pages/GraphPlotter'
 import Profile from './pages/Profile'
 import DoNow from './pages/DoNow'
+import FrayerModels from './pages/FrayerModels'
 import Layout from './components/Layout'
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
           <Route path="graph" element={<GraphPlotter />} />
           <Route path="profile" element={<Profile session={session} />} />
           <Route path="donow" element={<DoNow />} />
+          <Route path="frayer" element={<FrayerModels />} />
         </Route>
       </Routes>
     </BrowserRouter>

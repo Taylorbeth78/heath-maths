@@ -49,6 +49,7 @@ export default function Layout({ session }) {
 
           <div style={styles.sectionLabel}>Lesson Tools</div>
           <NavLink to="/donow" style={({ isActive }) => navItem(isActive)}>Do Now</NavLink>
+            <NavLink to="/frayer" style={({ isActive }) => navItem(isActive)}>Frayer Models</NavLink>
           <NavLink to="/whiteboard" style={({ isActive }) => navItem(isActive)}>✏️ Whiteboard</NavLink>
           <NavLink to="/calculator" style={({ isActive }) => navItem(isActive)}>🧮 Calculator</NavLink>
           <NavLink to="/graph" style={({ isActive }) => navItem(isActive)}>📈 Graph Plotter</NavLink>
