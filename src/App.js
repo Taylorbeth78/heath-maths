@@ -10,6 +10,7 @@ import Whiteboard from './pages/Whiteboard'
 import Calculator from './pages/Calculator'
 import GraphPlotter from './pages/GraphPlotter'
 import Profile from './pages/Profile'
+import DoNow from './pages/DoNow'
 import Layout from './components/Layout'
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           <Route path="calculator" element={<Calculator />} />
           <Route path="graph" element={<GraphPlotter />} />
           <Route path="profile" element={<Profile session={session} />} />
+          <Route path="donow" element={<DoNow />} />
         </Route>
       </Routes>
     </BrowserRouter>
