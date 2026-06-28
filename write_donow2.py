@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+content = r"""import React, { useState, useRef } from 'react'
 
 const QUESTIONS = {
   'Place value & rounding': [
@@ -257,7 +257,7 @@ export default function DoNow(){
 
   function doPrint(){
     const w=window.open('','_blank')
-    w.document.write('<html><head><title>Do Now</title><style>@page{size:A4 landscape;margin:16px}*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}body{padding:24px;color:#1a1a1a}.header{display:flex;justify-content:space-between;border-bottom:3px solid #2d6a2d;padding-bottom:10px;margin-bottom:16px}h1{font-size:20px;color:#2d6a2d;font-weight:700}.vocab{background:#fdf6e3;border:2px solid #c9a227;border-radius:8px;padding:14px;margin-bottom:14px}.vword{font-size:20px;font-weight:700;margin-bottom:4px}.vdef{font-size:13px;margin-bottom:3px}.vex{font-size:12px;color:#666;font-style:italic}.q{border:1px solid #ddd;border-left:4px solid #2d6a2d;border-radius:6px;padding:12px;margin-bottom:10px}.ql{font-size:11px;font-weight:700;color:#2d6a2d;text-transform:uppercase;margin-bottom:5px}.qt{font-size:15px;font-weight:500}.space{border-bottom:1px solid #ccc;height:32px;margin-top:12px}.ch{border:2px solid #c9a227;border-radius:6px;padding:12px;background:#fffdf0}.chl{font-size:11px;font-weight:700;color:#a07d10;text-transform:uppercase;margin-bottom:5px}.footer{margin-top:16px;text-align:center;font-size:11px;color:#999;border-top:1px solid #eee;padding-top:8px}</style></head><body>'+ref.current.innerHTML+'</body></html>')
+    w.document.write('<html><head><title>Do Now</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}body{padding:24px;color:#1a1a1a}.header{display:flex;justify-content:space-between;border-bottom:3px solid #2d6a2d;padding-bottom:10px;margin-bottom:16px}h1{font-size:20px;color:#2d6a2d;font-weight:700}.vocab{background:#fdf6e3;border:2px solid #c9a227;border-radius:8px;padding:14px;margin-bottom:14px}.vword{font-size:20px;font-weight:700;margin-bottom:4px}.vdef{font-size:13px;margin-bottom:3px}.vex{font-size:12px;color:#666;font-style:italic}.q{border:1px solid #ddd;border-left:4px solid #2d6a2d;border-radius:6px;padding:12px;margin-bottom:10px}.ql{font-size:11px;font-weight:700;color:#2d6a2d;text-transform:uppercase;margin-bottom:5px}.qt{font-size:15px;font-weight:500}.space{border-bottom:1px solid #ccc;height:32px;margin-top:12px}.ch{border:2px solid #c9a227;border-radius:6px;padding:12px;background:#fffdf0}.chl{font-size:11px;font-weight:700;color:#a07d10;text-transform:uppercase;margin-bottom:5px}.footer{margin-top:16px;text-align:center;font-size:11px;color:#999;border-top:1px solid #eee;padding-top:8px}</style></head><body>'+ref.current.innerHTML+'</body></html>')
     w.document.close();setTimeout(()=>{w.print();w.close()},400)
   }
 
@@ -367,3 +367,7 @@ export default function DoNow(){
     </div>
   )
 }
+"""
+with open('/Users/bethtaylor/Downloads/heath-maths/src/pages/DoNow.js', 'w') as f:
+    f.write(content)
+print('done')
