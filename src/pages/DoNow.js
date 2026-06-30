@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { supabase } from '../lib/supabase'
 
 const QUESTIONS = {
   'Place value & rounding': [
@@ -282,11 +283,11 @@ function getQuestion(topic, difficulty){
   return shuffle(pool)[0] || {q:'Question not found',a:'N/A',d:difficulty}
 }
 
-function getVocab(topics){
+function getVocab(topics, bank){
   const cats = [...new Set(topics.map(t=>TOPIC_CATEGORY[t]||'Number'))]
   const cat = shuffle(cats)[0]||'Number'
-  const words = VOCABULARY[cat]||VOCABULARY['Number']
-  return shuffle(words)[0]
+  const words = (bank[cat]&&bank[cat].length?bank[cat]:bank['Number'])||[]
+  return shuffle(words)[0] || {word:'',def:'',ex:'',e:'📘',clue:'',chips:[]}
 }
 
 export default function DoNow(){
@@ -298,7 +299,21 @@ export default function DoNow(){
   const [doNow,setDoNow]=useState(null)
   const [answers,setAnswers]=useState(false)
   const [error,setError]=useState(null)
+  const [vocabBank,setVocabBank]=useState({})
+  const [vocabAnswer,setVocabAnswer]=useState('')
   const ref=useRef()
+
+  useEffect(()=>{
+    supabase.from('vocabulary').select('*').then(({data,error})=>{
+      if(error){console.error('Vocabulary load error:',error);return}
+      const grouped={}
+      data.forEach(row=>{
+        if(!grouped[row.category])grouped[row.category]=[]
+        grouped[row.category].push({word:row.word,def:row.definition,ex:row.sentence_starter||row.clue,e:'📘',clue:row.clue,chips:row.hint_chips||[]})
+      })
+      setVocabBank(grouped)
+    })
+  },[])
 
   function generate(){
     setError(null)
@@ -312,7 +327,8 @@ export default function DoNow(){
     }
     const questions=chosen.map(c=>({...getQuestion(c.topic,c.difficulty),topic:c.topic,difficulty:c.difficulty}))
     const challenge=getQuestion(shuffle(chosen)[0].topic, Math.min(chosen[0].difficulty+2, 6))
-    const vocab=getVocab(chosen.map(c=>c.topic))
+    const vocab=getVocab(chosen.map(c=>c.topic),vocabBank)
+    setVocabAnswer('')
     const litType=Math.random()>0.5?'sentence':'definition';setDoNow({questions,challenge,vocab,litType,yg:mode==='auto'?yg:'Custom',date:new Date().toLocaleDateString('en-GB')})
     setAnswers(false)
   }
@@ -387,15 +403,23 @@ export default function DoNow(){
             </div>
             <div style={{background:'#fdf6e3',border:'2px solid var(--gold)',borderRadius:'10px',padding:'16px',marginBottom:'18px'}}>
               <div style={{fontSize:'11px',fontWeight:'700',color:'var(--gold-dark)',textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:'8px'}}>📖 Key Word — Literacy Focus</div>
-              <div style={{display:'flex',gap:'14px',alignItems:'flex-start'}}>
-                <div style={{fontSize:'34px'}}>{doNow.vocab.e}</div>
-                <div>
-                  <div style={{fontSize:'20px',fontWeight:'700',marginBottom:'4px'}}>{doNow.vocab.word}</div>
-                  <div style={{fontSize:'14px',color:'#333',marginBottom:'4px',lineHeight:'1.5'}}>{doNow.vocab.def}</div>
-                  <div style={{fontSize:'12px',color:'var(--muted)',fontStyle:'italic'}}>{doNow.vocab.ex}</div>
+              <div style={{fontSize:'20px',fontWeight:'700',marginBottom:'8px'}}>{doNow.vocab.word}</div>
+              {doNow.vocab.clue&&<div style={{fontSize:'13px',color:'var(--gold-dark)',fontWeight:'500',marginBottom:'8px'}}>Clue: {doNow.vocab.clue}</div>}
+              {doNow.vocab.chips&&doNow.vocab.chips.length>0&&(
+                <div style={{display:'flex',flexWrap:'wrap',gap:'6px',marginBottom:'10px'}}>
+                  {doNow.vocab.chips.map((c,i)=>(
+                    <button key={i} onClick={()=>setVocabAnswer(a=>(a?a+' ':'')+c)} style={{background:'#fff8e6',border:'1px solid var(--gold)',borderRadius:'14px',padding:'4px 10px',fontSize:'12px',color:'var(--gold-dark)',cursor:'pointer'}}>{c}</button>
+                  ))}
                 </div>
-              </div>
-              <div style={{marginTop:'10px',paddingTop:'8px',borderTop:'1px solid #e8d080',fontSize:'12px',color:'var(--gold-dark)',fontWeight:'500'}}>Use this word in a sentence: ________________________________________________</div>
+              )}
+              <textarea value={vocabAnswer} onChange={e=>setVocabAnswer(e.target.value)} placeholder="Write your own definition in your own words..." style={{width:'100%',minHeight:'50px',padding:'8px 10px',border:'1px solid #e8d080',borderRadius:'6px',fontSize:'13px',fontFamily:'inherit',resize:'vertical'}} />
+              {answers&&(
+                <div style={{marginTop:'10px',paddingTop:'8px',borderTop:'1px solid #e8d080'}}>
+                  <div style={{fontSize:'12px',fontWeight:'700',color:'var(--gold-dark)',marginBottom:'2px'}}>Answer:</div>
+                  <div style={{fontSize:'13px',color:'#333',lineHeight:'1.5'}}>{doNow.vocab.def}</div>
+                  {doNow.vocab.ex&&<div style={{fontSize:'12px',color:'var(--muted)',fontStyle:'italic',marginTop:'4px'}}>{doNow.vocab.ex}</div>}
+                </div>
+              )}
             </div>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'12px',marginBottom:'14px'}}>
               {doNow.questions.map((q,i)=>(
