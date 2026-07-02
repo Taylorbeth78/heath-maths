@@ -275,6 +275,7 @@ const ALL_TOPICS = Object.keys(QUESTIONS)
 
 function shuffle(a){return[...a].sort(()=>Math.random()-0.5)}
 function pick(arr,n){return shuffle(arr).slice(0,n)}
+function marksFor(d){return d<=2?1:d<=4?2:3}
 
 function getQuestion(topic, difficulty){
   const qs = QUESTIONS[topic]||[]
@@ -293,9 +294,9 @@ function getVocab(topics, bank){
 export default function DoNow(){
   const [mode,setMode]=useState('auto')
   const [yg,setYg]=useState('Year 7')
-  const [sel,setSel]=useState([{topic:'',difficulty:3},{topic:'',difficulty:3},{topic:'',difficulty:3}])
-  const [search,setSearch]=useState(['','',''])
-  const [drop,setDrop]=useState([false,false,false])
+  const [sel,setSel]=useState([{topic:'',difficulty:3},{topic:'',difficulty:3},{topic:'',difficulty:3},{topic:'',difficulty:3}])
+  const [search,setSearch]=useState(['','','',''])
+  const [drop,setDrop]=useState([false,false,false,false])
   const [doNow,setDoNow]=useState(null)
   const [answers,setAnswers]=useState(false)
   const [error,setError]=useState(null)
@@ -320,9 +321,9 @@ export default function DoNow(){
     let chosen
     if(mode==='auto'){
       const pool=YEAR_TOPICS[yg]||YEAR_TOPICS['Year 7']
-      chosen=pick(pool,3).map(t=>({topic:t,difficulty:3}))
+      chosen=pick(pool,4).map(t=>({topic:t,difficulty:3}))
     } else {
-      if(sel.some(s=>!s.topic)){setError('Please select all 3 topics.');return}
+      if(sel.some(s=>!s.topic)){setError('Please select all 4 topics.');return}
       chosen=sel
     }
     const questions=chosen.map(c=>({...getQuestion(c.topic,c.difficulty),topic:c.topic,difficulty:c.difficulty}))
@@ -361,7 +362,7 @@ export default function DoNow(){
           </select></div>
         ):(
           <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
-            {[0,1,2].map(i=>(
+            {[0,1,2,3].map(i=>(
               <div key={i} style={{display:'flex',gap:'10px',alignItems:'center',flexWrap:'wrap'}}>
                 <div style={{position:'relative',flex:1,minWidth:'180px'}}>
                   <input value={search[i]} onChange={e=>{const s=[...search];s[i]=e.target.value;setSearch(s);const d=[...drop];d[i]=true;setDrop(d);if(!e.target.value){const t=[...sel];t[i]={...t[i],topic:''};setSel(t)}}} placeholder={'Search topic '+(i+1)+'...'} style={{width:'100%',padding:'8px 12px',border:'1px solid var(--border)',borderRadius:'7px',fontSize:'14px'}}/>
@@ -395,11 +396,20 @@ export default function DoNow(){
       </div>
 
       {doNow&&(
-        <div style={{background:'white',border:'1px solid var(--border)',borderRadius:'12px',padding:'28px'}}>
-          <div ref={ref}>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',borderBottom:'3px solid #2d6a2d',paddingBottom:'12px',marginBottom:'18px'}}>
-              <div><h1 style={{fontSize:'20px',fontWeight:'700',color:'var(--green)'}}>Heath School — Maths Do Now</h1><p style={{fontSize:'13px',color:'var(--muted)'}}>{doNow.yg}</p></div>
-              <div style={{textAlign:'right',fontSize:'12px',color:'var(--muted)',lineHeight:'2'}}><div>Date: {doNow.date}</div><div>Name: _______________________</div><div>Class: _______________________</div></div>
+        <div style={{background:'white',border:'1px solid var(--border)',borderRadius:'12px',overflow:'hidden',display:'flex'}}>
+          <div style={{background:'var(--green)',width:'50px',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+            <div style={{writingMode:'vertical-rl',transform:'rotate(180deg)',fontSize:'22px',fontWeight:'600',color:'white',letterSpacing:'1px'}}>Do Now</div>
+          </div>
+          <div ref={ref} style={{flex:1,padding:'24px'}}>
+            <div style={{display:'flex',gap:'10px',marginBottom:'16px'}}>
+              <div style={{flex:1,background:'var(--green-light)',border:'1px solid var(--green)',borderRadius:'8px',padding:'8px 14px'}}>
+                <div style={{fontSize:'10px',color:'var(--green-dark)',textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:'1px'}}>Heath School — Maths Do Now</div>
+                <div style={{fontSize:'14px',fontWeight:'500',color:'var(--green-dark)'}}>{doNow.yg}</div>
+              </div>
+              <div style={{background:'var(--green-light)',border:'1px solid var(--green)',borderRadius:'8px',padding:'8px 14px',display:'flex',flexDirection:'column',justifyContent:'center'}}>
+                <div style={{fontSize:'10px',color:'var(--green-dark)',textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:'1px'}}>Date</div>
+                <div style={{fontSize:'14px',fontWeight:'500',color:'var(--green-dark)'}}>{doNow.date}</div>
+              </div>
             </div>
             <div style={{background:'#fdf6e3',border:'2px solid var(--gold)',borderRadius:'10px',padding:'16px',marginBottom:'18px'}}>
               <div style={{fontSize:'11px',fontWeight:'700',color:'var(--gold-dark)',textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:'8px'}}>📖 Key Word — Literacy Focus</div>
@@ -421,15 +431,17 @@ export default function DoNow(){
                 </div>
               )}
             </div>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'12px',marginBottom:'14px'}}>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px',marginBottom:'14px'}}>
               {doNow.questions.map((q,i)=>(
-                <div key={i} style={{border:'1px solid var(--border)',borderLeft:'4px solid var(--green)',borderRadius:'8px',padding:'16px'}}>
+                <div key={i} style={{border:'1px solid var(--border)',borderLeft:'4px solid var(--green)',borderRadius:'8px',padding:'16px',position:'relative'}}>
                   <div style={{display:'flex',justifyContent:'space-between',marginBottom:'8px'}}>
                     <div style={{fontSize:'11px',fontWeight:'700',color:'var(--green)',textTransform:'uppercase'}}>Question {i+1} — {q.topic}</div>
                     <div style={{fontSize:'12px',color:'var(--gold-dark)'}}>{'★'.repeat(q.difficulty)}{'☆'.repeat(6-q.difficulty)}</div>
                   </div>
                   <div style={{fontSize:'16px',fontWeight:'500',lineHeight:'1.5'}}>{q.q}</div>
+                  {q.diagram&&<div style={{margin:'10px 0'}} dangerouslySetInnerHTML={{__html:q.diagram}}/>}
                   {answers?<div style={{background:'var(--green-light)',borderRadius:'6px',padding:'10px 14px',marginTop:'10px',fontSize:'14px',color:'var(--green-dark)',fontWeight:'500'}}>✅ {q.a}</div>:<div style={{borderBottom:'1px solid #ccc',marginTop:'18px',paddingBottom:'18px'}}/>}
+                  <div style={{position:'absolute',bottom:'8px',right:'12px',fontSize:'10px',fontStyle:'italic',color:'var(--muted)'}}>{marksFor(q.difficulty)} mark{marksFor(q.difficulty)>1?'s':''}</div>
                 </div>
               ))}
             </div>
