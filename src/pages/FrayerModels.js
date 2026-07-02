@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { supabase } from '../lib/supabase'
 
 const FRAYER_DATA = {
   'Integer': {
@@ -156,21 +157,50 @@ const FRAYER_DATA = {
   },
 }
 
-const CATEGORIES = ['All', 'Number', 'Algebra', 'Geometry', 'Statistics']
+const CATEGORIES = ['All', 'Number', 'Algebra', 'Geometry', 'Statistics', 'Functional', 'Higher']
 
 const CAT_COLORS = {
   'Number':    { bg: '#2563eb', light: '#eff6ff', border: '#93c5fd' },
   'Algebra':   { bg: '#7c3aed', light: '#f5f3ff', border: '#c4b5fd' },
   'Geometry':  { bg: '#059669', light: '#ecfdf5', border: '#6ee7b7' },
   'Statistics':{ bg: '#d97706', light: '#fffbeb', border: '#fcd34d' },
+  'Functional':{ bg: '#db2777', light: '#fdf2f8', border: '#f9a8d4' },
+  'Higher':    { bg: '#4f46e5', light: '#eef2ff', border: '#a5b4fc' },
 }
 
 export default function FrayerModels() {
   const [search, setSearch] = React.useState('')
   const [category, setCategory] = React.useState('All')
   const [selected, setSelected] = React.useState(null)
+  const [dbFrayerData, setDbFrayerData] = React.useState({})
+  const [loadStatus, setLoadStatus] = React.useState('Loading from database...')
 
-  const filtered = Object.entries(FRAYER_DATA).filter(([word, data]) => {
+  React.useEffect(() => {
+    supabase.from('vocabulary').select('*').then(({data, error}) => {
+      if (error) { setLoadStatus('ERROR: ' + error.message); return }
+      if (!data) { setLoadStatus('ERROR: no data returned'); return }
+      const loaded = {}
+      data.forEach(row => {
+        if (row.characteristics && row.characteristics.length > 0) {
+          loaded[row.word] = {
+            definition: row.definition,
+            characteristics: row.characteristics,
+            examples: row.examples || [],
+            nonExamples: row.non_examples || [],
+            exSvg: row.ex_svg || '',
+            nonSvg: row.non_svg || '',
+            category: row.category
+          }
+        }
+      })
+      setDbFrayerData(loaded)
+      setLoadStatus('Loaded ' + Object.keys(loaded).length + ' words from database (of ' + data.length + ' total rows fetched)')
+    })
+  }, [])
+
+  const allFrayerData = { ...FRAYER_DATA, ...dbFrayerData }
+
+  const filtered = Object.entries(allFrayerData).filter(([word, data]) => {
     const matchCat = category === 'All' || data.category === category
     const matchSearch = word.toLowerCase().includes(search.toLowerCase())
     return matchCat && matchSearch
@@ -178,7 +208,7 @@ export default function FrayerModels() {
 
   function doPrint() {
     if (!selected) return
-    const data = FRAYER_DATA[selected]
+    const data = allFrayerData[selected]
     const col = CAT_COLORS[data.category] || CAT_COLORS['Number']
     const w = window.open('', '_blank')
     w.document.write('<html><head><title>Frayer Model - ' + selected + '</title><style>@page{size:A4 landscape;margin:15px}*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}body{padding:15px;color:#1a1a1a}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid ' + col.bg + ';padding-bottom:8px;margin-bottom:12px}.title{font-size:16px;font-weight:700;color:' + col.bg + '}.word-box{text-align:center;padding:10px;background:' + col.light + ';border:3px solid ' + col.bg + ';border-radius:10px;margin-bottom:12px}.word{font-size:30px;font-weight:700;color:' + col.bg + '}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.box{border:2px solid ' + col.border + ';border-radius:8px;padding:12px}.box-red{border:2px solid #fca5a5;border-radius:8px;padding:12px;background:#fef2f2}.box-title{font-size:11px;font-weight:700;color:' + col.bg + ';text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid ' + col.border + '}.box-title-red{font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #fca5a5}.content{font-size:13px;line-height:1.6}li{margin-left:16px;margin-bottom:2px}.footer{margin-top:10px;text-align:center;font-size:10px;color:#999;border-top:1px solid #eee;padding-top:6px}</style></head><body><div class="top"><div class="title">Heath School - Maths Frayer Model</div><div style="font-size:11px;color:#666">' + new Date().toLocaleDateString('en-GB') + '</div></div><div class="word-box"><div class="word">' + selected + '</div><div style="font-size:12px;color:#666;margin-top:3px">' + data.category + '</div></div><div class="grid"><div class="box"><div class="box-title">Definition</div><div class="content">' + data.definition + '</div></div><div class="box"><div class="box-title">Characteristics</div><div class="content"><ul>' + data.characteristics.map(function(c){return '<li>'+c+'</li>'}).join('') + '</ul></div></div><div class="box"><div class="box-title">Examples</div>' + data.exSvg + '<div class="content" style="margin-top:6px"><ul>' + data.examples.map(function(e){return '<li>'+e+'</li>'}).join('') + '</ul></div></div><div class="box-red"><div class="box-title-red">Non-Examples</div>' + data.nonSvg + '<div class="content" style="margin-top:6px"><ul>' + data.nonExamples.map(function(e){return '<li>'+e+'</li>'}).join('') + '</ul></div></div></div><div class="footer">Heath School Maths Hub - Frayer Model - ' + selected + '</div></body></html>')
@@ -189,7 +219,8 @@ export default function FrayerModels() {
   return (
     React.createElement('div', null,
       React.createElement('h1', {style:{fontSize:'22px',fontWeight:'600',marginBottom:'6px'}}, 'Frayer Models'),
-      React.createElement('p', {style:{fontSize:'13px',color:'var(--muted)',marginBottom:'20px'}}, 'Visual vocabulary cards for GCSE Maths keywords'),
+      React.createElement('p', {style:{fontSize:'13px',color:'var(--muted)',marginBottom:'6px'}}, 'Visual vocabulary cards for GCSE Maths keywords'),
+      React.createElement('p', {style:{fontSize:'12px',color:loadStatus.startsWith('ERROR')?'#dc2626':'#059669',marginBottom:'20px',fontFamily:'monospace'}}, loadStatus),
       React.createElement('div', {style:{background:'white',border:'1px solid var(--border)',borderRadius:'12px',padding:'20px',marginBottom:'20px'}},
         React.createElement('div', {style:{display:'flex',gap:'10px',flexWrap:'wrap',marginBottom:'16px'}},
           React.createElement('input', {value:search, onChange:function(e){setSearch(e.target.value)}, placeholder:'Search keywords...', style:{flex:1,minWidth:'200px',padding:'9px 14px',border:'1px solid var(--border)',borderRadius:'7px',fontSize:'14px'}}),
@@ -203,8 +234,8 @@ export default function FrayerModels() {
           })
         )
       ),
-      selected && FRAYER_DATA[selected] ? (function(){
-        var data = FRAYER_DATA[selected];
+      selected && allFrayerData[selected] ? (function(){
+        var data = allFrayerData[selected];
         var col = CAT_COLORS[data.category] || CAT_COLORS['Number'];
         return React.createElement('div', {style:{background:'white',border:'1px solid var(--border)',borderRadius:'12px',padding:'24px'}},
           React.createElement('div', {style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'16px'}},
@@ -244,7 +275,7 @@ export default function FrayerModels() {
       })() : React.createElement('div', {style:{background:'white',border:'2px dashed var(--border)',borderRadius:'12px',padding:'60px',textAlign:'center',color:'var(--muted)'}},
         React.createElement('div', {style:{fontSize:'48px',marginBottom:'12px'}}, 'book'),
         React.createElement('p', {style:{fontSize:'16px'}}, 'Select a keyword above to view its Frayer Model'),
-        React.createElement('p', {style:{fontSize:'13px',marginTop:'6px'}}, Object.keys(FRAYER_DATA).length + ' keywords with diagrams, definitions, examples and non-examples')
+        React.createElement('p', {style:{fontSize:'13px',marginTop:'6px'}}, Object.keys(allFrayerData).length + ' keywords with diagrams, definitions, examples and non-examples')
       )
     )
   )
